@@ -21,6 +21,7 @@ export default function PostForm({ post }) {
   const submit = async (data) => {
     try {
       let fileId = post?.image || null;
+
       if (data.image && data.image[0]) {
         const file = await appwriteService.uploadFile(data.image[0]);
         if (file) {
@@ -30,12 +31,19 @@ export default function PostForm({ post }) {
       }
 
       const dbPost = post
-        ? await appwriteService.updatePost(post.$id, { ...data, featuredImage: fileId })
-        : await appwriteService.createPost({ ...data, userId: userData.$id, featuredImage: fileId });
+        ? await appwriteService.updatePost(post?.$id, {
+            ...data,
+            featuredImage: fileId,
+          })
+        : await appwriteService.createPost({
+            ...data,
+            userId: userData?.$id,
+            featuredImage: fileId,
+          });
 
-      if (dbPost) navigate(`/post/${dbPost.$id}`);
+      if (dbPost?.$id) navigate(`/post/${dbPost.$id}`);
     } catch (err) {
-      console.error(err);
+      console.error("PostForm submit error:", err);
     }
   };
 
@@ -61,7 +69,12 @@ export default function PostForm({ post }) {
           {...register("slug", { required: true })}
           onInput={(e) => setValue("slug", slugTransform(e.currentTarget.value))}
         />
-        <RTE label="Content:" name="content" control={control} defaultValue={getValues("content")} />
+        <RTE
+          label="Content:"
+          name="content"
+          control={control}
+          defaultValue={getValues("content")}
+        />
       </div>
 
       <div className="flex-1 w-full md:w-1/3 space-y-4">
@@ -75,7 +88,7 @@ export default function PostForm({ post }) {
         {post?.image && (
           <img
             src={appwriteService.getFileUrl(post.image)}
-            alt={post.title}
+            alt={post?.title}
             className="w-full rounded-lg"
           />
         )}
