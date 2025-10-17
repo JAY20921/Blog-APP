@@ -14,25 +14,29 @@ export class Service {
         this.bucket = new Storage(this.client);
     }
 
+    // ✅ Create a new post
     async createPost({ title, slug, content, featuredImage, status, userId }) {
-        try {
-            return await this.databases.createDocument(
-                conf.appwriteDatabaseId,
-                conf.appwriteCollectionId,
-                ID.unique(), // use unique ID instead of slug to avoid unknown attribute errors
-                {
-                    title,
-                    content,
-                    image: featuredImage || "",
-                    status,
-                    userid: userId,
-                }
-            );
-        } catch (error) {
-            console.log("Appwrite service :: createPost :: error", error);
-        }
+    try {
+        return await this.databases.createDocument(
+            conf.appwriteDatabaseId,
+            conf.appwriteCollectionId,
+            ID.unique(), // unique ID instead of slug
+            {
+                title,
+                content,
+                image: featuredImage || "",
+                status,
+                userid: userId, // ✅ must match Appwrite field exactly
+            }
+        );
+    } catch (error) {
+        console.log("Appwrite service :: createPost :: error", error);
+        throw error; // optional: helps debugging
     }
+}
 
+
+    // ✅ Update existing post
     async updatePost(slug, { title, content, featuredImage, status }) {
         try {
             return await this.databases.updateDocument(
@@ -51,6 +55,7 @@ export class Service {
         }
     }
 
+    // ✅ Delete a post
     async deletePost(slug) {
         try {
             await this.databases.deleteDocument(
@@ -65,6 +70,7 @@ export class Service {
         }
     }
 
+    // ✅ Get a single post
     async getPost(slug) {
         try {
             return await this.databases.getDocument(
@@ -78,6 +84,7 @@ export class Service {
         }
     }
 
+    // ✅ Get all posts (active only)
     async getPosts(queries = [Query.equal("status", "active")]) {
         try {
             return await this.databases.listDocuments(
@@ -91,7 +98,7 @@ export class Service {
         }
     }
 
-    // file upload service
+    // ✅ Upload a file
     async uploadFile(file) {
         try {
             return await this.bucket.createFile(
@@ -105,6 +112,7 @@ export class Service {
         }
     }
 
+    // ✅ Delete a file
     async deleteFile(fileId) {
         try {
             await this.bucket.deleteFile(
@@ -118,9 +126,14 @@ export class Service {
         }
     }
 
-    // Free plan-compatible file URL
+    // ✅ Get file preview URL (works on free Appwrite plan)
     getFileUrl(fileId) {
         return `${conf.appwriteUrl}/storage/buckets/${conf.appwriteBucketId}/files/${fileId}/view?project=${conf.appwriteProjectId}`;
+    }
+
+    // ✅ Alias for compatibility (fixes "getFileView is not a function" error)
+    getFileView(fileId) {
+        return this.getFileUrl(fileId);
     }
 }
 
