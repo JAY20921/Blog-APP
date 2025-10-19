@@ -1,12 +1,41 @@
-# React + Vite
+# Blog App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern **Blog Application** built with **React**, **TailwindCSS**, and **Appwrite** for backend services. This app allows users to create, read, update, and delete blog posts, upload images, and interact with posts through likes and shares.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- **User Authentication:** Sign in and sign out using Appwrite’s authentication system.  
+- **CRUD Operations for Posts:**  
+  - Create new posts with title, content, and featured image.  
+  - Edit and update existing posts.  
+  - Delete posts.  
+- **Post Interactions:**  
+  - Like posts (with real-time like count).  
+  - Share posts (UI support).  
+- **File Upload:** Upload featured images for posts using Appwrite Storage.  
+- **Responsive UI:** Modern and clean UI built with TailwindCSS, inspired by Material-UI card layouts.  
+- **Routing:** Navigate to individual posts using React Router.  
+- **State Management:** Handles authentication and global state using Redux (`authSlice`).  
+- **Deployment Ready:** Deployed on Vercel for instant live preview.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## Tech Stack
+
+- **Frontend:**  
+  - React.js  
+  - TailwindCSS  
+  - React Router  
+
+- **Backend / Database:**  
+  - Appwrite (Database & Storage)  
+
+- **Deployment:**  
+  - Vercel  
+
+---
+
+## Project Structure
+
