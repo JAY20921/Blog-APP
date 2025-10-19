@@ -135,7 +135,49 @@ export class Service {
     getFileView(fileId) {
         return this.getFileUrl(fileId);
     }
+
+    async likePost(postId) {
+        try {
+            const post = await this.getPost(postId);
+            const currentLikes = post.likes || 0;
+
+            return await this.databases.updateDocument(
+                conf.appwriteDatabaseId,
+                conf.appwriteCollectionId,
+                postId,
+                {
+                    likes: currentLikes + 1,
+                }
+            );
+        } catch (error) {
+            console.log("Appwrite service :: likePost :: error", error);
+            return false;
+        }
+    }
+
+    // Decrement likes for a post
+    async unlikePost(postId) {
+        try {
+            const post = await this.getPost(postId);
+            const currentLikes = post.likes || 0;
+
+            return await this.databases.updateDocument(
+                conf.appwriteDatabaseId,
+                conf.appwriteCollectionId,
+                postId,
+                {
+                    likes: Math.max(currentLikes - 1, 0),
+                }
+            );
+        } catch (error) {
+            console.log("Appwrite service :: unlikePost :: error", error);
+            return false;
+        }
+    }
+
+    
 }
+
 
 const service = new Service();
 export default service;
